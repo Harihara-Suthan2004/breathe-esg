@@ -1,0 +1,25 @@
+# Python / Django base dependencies
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.Python
+venv/
+ENV/
+env/
+.env
+
+# Node / React frontend dependencies
+node_modules/
+/frontend/dist/
+.eslintcache
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# System / IDE specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
