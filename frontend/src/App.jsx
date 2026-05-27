@@ -7,12 +7,15 @@ export default function App() {
   const [error, setError] = useState(null);
   const [filterStatus, setFilterStatus] = useState('ALL');
 
-  // Fetch normalized data rows from our Django API REST endpoint
+  // Live Render production backend URL base string
+  const BACKEND_URL = 'https://breathe-esg-backend-21a3.onrender.com';
+
+  // Fetch normalized data rows from our live Django API REST endpoint
   const fetchRecords = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/records/');
-      if (!response.ok) throw new Error('Failed to communicate with ESG backend services.');
+      const response = await fetch(`${BACKEND_URL}/api/records/`);
+      if (!response.ok) throw new Error('Failed to communicate with live ESG backend services.');
       const data = await response.json();
       setRecords(data);
       setError(null);
@@ -30,7 +33,7 @@ export default function App() {
   // Custom API trigger action to trigger a record-lock sequence inside the database via Django actions
   const handleLockRecord = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/records/${id}/lock_record/`, {
+      const response = await fetch(`${BACKEND_URL}/api/records/${id}/lock_record/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
