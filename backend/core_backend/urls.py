@@ -15,9 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include  # <-- Make sure 'include' is imported here!
+from django.urls import path, include  
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('ingestion.urls')),  # <-- Hooks up the api/ routes cleanly
+    path('api/', include('ingestion.urls')),  
 ]
+
+# --- AUTOMATIC PRODUCTION SUPERUSER WORKAROUND ---
+# Since Render's Free Tier blocks access to the interactive 'Shell' feature,
+# this code programmatically generates your core admin credentials on application boot.
+from django.contrib.auth import get_user_model
+
+try:
+    User = get_user_model()
+    if not User.objects.filter(is_superuser=True).exists():
+        print("No administrative profiles located. Seeding default superuser configuration...")
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@breatheesg.com',
+            password='ProductionAdminPassword123!'
+        )
+        print("Superuser account 'admin' provisioned successfully.")
+except Exception as e:
+    print(f"Superuser seeding cycle bypassed or database context uninitialized: {e}")
